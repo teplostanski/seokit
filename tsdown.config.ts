@@ -2,12 +2,15 @@ import { defineConfig } from 'tsdown'
 
 export default defineConfig([
   {
-    entry: ['./src/index.ts'],
+    entry: {
+      index: './src/index.ts',
+      config: './src/config.ts',
+      api: './src/api',
+    },
     platform: 'node',
     dts: true,
     format: ['esm', 'cjs'],
     target: 'node18',
     shims: true,
-    sourcemap: true,
   },
 ])
