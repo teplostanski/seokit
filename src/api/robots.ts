@@ -1,9 +1,8 @@
-import { NEW_LINE } from '../shared/constants'
-import type { RobotsConfig } from '../shared/types'
-import type { BuildResult, RobotsBuildResult } from './types'
+import type { RobotsOptions } from '../shared/types'
+import { makeBuildResult } from '../shared/utils'
+import type { BuildResult } from './types'
 
-const DEFAULT_FILE_NAME = 'robots.txt'
-const DEFAULT_FILE_PATH = 'public'
+const NEW_LINE = '\n' as const
 
 const addLine = (
   name: string,
@@ -22,6 +21,9 @@ const addLine = (
     : formatLine(formatRule(rule))
 }
 
+/**
+ * TODO: переписать на функцию, чтобы избежать непредвиденных багов
+ */
 const policyMap = {
   comment: (rule: string | string[]) => addLine('#', rule),
   userAgent: (rule: string) => addLine('User-agent', rule),
@@ -54,22 +56,12 @@ export const buildUserAgentPolicies = (
     }, '')
 }
 
-export const composeContent = (
-  comment?: string | string[],
-  userAgentRules?: Array<{
-    userAgent: string
-    disallow?: string | string[]
-    allow?: string | string[]
-    crawlDelay?: number
-  }>,
-  host?: string,
-  sitemap?: string,
-): string => {
+export const composeContent = (config: Omit<RobotsOptions, 'path'>): string => {
   const sections = [
-    comment ? policyMap.comment(comment) : '',
-    userAgentRules ? buildUserAgentPolicies(userAgentRules) : '',
-    host ? policyMap.host(host) : '',
-    sitemap ? policyMap.sitemap(sitemap) : '',
+    config.comment ? policyMap.comment(config.comment) : '',
+    config.policy ? buildUserAgentPolicies(config.policy) : '',
+    config.host ? policyMap.host(config.host) : '',
+    config.sitemap ? policyMap.sitemap(config.sitemap) : '',
   ]
     .filter(Boolean)
     .join(NEW_LINE)
@@ -77,18 +69,12 @@ export const composeContent = (
   return sections
 }
 
-const createBuildResult = (
-  content: string,
-  filePath: string,
-): RobotsBuildResult =>
-  Object.freeze({
-    content,
-    filePath,
-    fileName: DEFAULT_FILE_NAME,
-  })
-
 const buildResult = {
-  object: (config: RobotsConfig): BuildResult => {
+  object: (
+    config: RobotsOptions,
+    defaultPath: string,
+    fileName: string,
+  ): BuildResult => {
     if (Object.keys(config).length === 0) {
       return {
         type: 'ERROR',
@@ -99,9 +85,9 @@ const buildResult = {
       }
     }
 
-    const { comment, policy, host, sitemap } = config
-    const content = composeContent(comment, policy, host, sitemap)
-    const result = createBuildResult(content, DEFAULT_FILE_PATH)
+    const { comment, policy, host, sitemap, path } = config
+    const content = composeContent({ comment, policy, host, sitemap })
+    const result = makeBuildResult(content, path ?? defaultPath, fileName)
 
     return {
       type: 'SUCCESS',
@@ -109,7 +95,11 @@ const buildResult = {
     }
   },
 
-  boolean: (config: boolean): BuildResult => {
+  boolean: (
+    config: boolean,
+    defaultPath: string,
+    fileName: string,
+  ): BuildResult => {
     if (!config) {
       return {
         type: 'ERROR',
@@ -120,10 +110,10 @@ const buildResult = {
       }
     }
 
-    const content = composeContent(undefined, [
-      { userAgent: '*', allow: ['/'] },
-    ])
-    const result = createBuildResult(content, DEFAULT_FILE_PATH)
+    const content = composeContent({
+      policy: [{ userAgent: '*', allow: ['/'] }],
+    })
+    const result = makeBuildResult(content, defaultPath, fileName)
 
     return {
       type: 'SUCCESS',
@@ -132,10 +122,13 @@ const buildResult = {
   },
 }
 
-export const buildRobots = (config: RobotsConfig | boolean): BuildResult => {
+export const buildRobots = (config: RobotsOptions | boolean): BuildResult => {
+  const fileName = 'robots.txt'
+  const defaultPath = 'public'
+
   if (typeof config === 'object' && config !== null) {
-    return buildResult.object(config)
+    return buildResult.object(config, defaultPath, fileName)
   }
 
-  return buildResult.boolean(config)
+  return buildResult.boolean(config, defaultPath, fileName)
 }

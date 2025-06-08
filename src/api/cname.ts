@@ -1,22 +1,15 @@
-import type { BuildResult, CNAMEBuildResult, CNAMEConfig } from "./types";
-
-const DEFAULT_FILE_NAME = 'CNAME'
+import { makeBuildResult } from '../shared/utils';
+import type { BuildResult, CNAMEConfig, CNAMEOptions } from './types'
 
 const normalizePath = (path: string): string =>
   path?.startsWith('/') ? path.slice(1) : path
 
-const createConfig = (content: string, filePath: string): CNAMEBuildResult =>
-  Object.freeze({
-    content,
-    filePath,
-    fileName: DEFAULT_FILE_NAME,
-  })
-
-const handleConfig = {
+const buildResult = {
   object: (
-    config: { customHostname?: string; path?: string },
+    config: CNAMEOptions,
     defaultPath: string,
     hostname: string,
+    fileName: string,
   ): BuildResult => {
     if (Object.keys(config).length === 0) {
       return {
@@ -28,9 +21,10 @@ const handleConfig = {
       }
     }
 
-    const result = createConfig(
+    const result = makeBuildResult(
       config.customHostname ?? hostname,
       normalizePath(config.path ?? defaultPath),
+      fileName,
     )
 
     return {
@@ -43,6 +37,7 @@ const handleConfig = {
     config: boolean,
     defaultPath: string,
     hostname: string,
+    fileName: string,
   ): BuildResult => {
     if (!config) {
       return {
@@ -54,7 +49,7 @@ const handleConfig = {
       }
     }
 
-    const result = createConfig(hostname, defaultPath)
+    const result = makeBuildResult(hostname, defaultPath, fileName)
     return {
       type: 'SUCCESS',
       ...result,
@@ -67,9 +62,11 @@ export const buildCNAME = (
   defaultPath: string,
   hostname: string,
 ): BuildResult => {
+  const fileName = 'CNAME'
+
   if (typeof config === 'object' && config !== null) {
-    return handleConfig.object(config, defaultPath, hostname)
+    return buildResult.object(config, defaultPath, hostname, fileName)
   }
 
-  return handleConfig.boolean(config, defaultPath, hostname)
+  return buildResult.boolean(config, defaultPath, hostname, fileName)
 }

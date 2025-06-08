@@ -1,4 +1,6 @@
-export interface RobotsConfig {
+import type { CNAMEConfig } from "../../api/types"
+
+export interface RobotsOptions {
   comment?: string | string[]
   policy: Array<{
     userAgent: string
@@ -11,17 +13,20 @@ export interface RobotsConfig {
   path?: string
 }
 
+export type RobotsConfig = boolean | RobotsOptions
+
 export interface UserConfig {
   hostname: string
-  cname?:
-    | boolean
-    | {
-        customHostname?: string
-        path?: string
-      }
-  robots?: boolean | RobotsConfig
+  cname?: CNAMEConfig
+  robots?: RobotsConfig
 }
 
 export interface ConfigOptions {
   configPath?: string
+}
+
+export type MakeBuildResult = {
+  content: string
+  filePath: string
+  fileName: string
 }
