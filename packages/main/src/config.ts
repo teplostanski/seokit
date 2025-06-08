@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import type { ConfigOptions, UserConfig } from './shared/types'
+import type { ConfigOptions, UserConfig } from '../../api/shared/types'
 
 const DEFAULT_CONFIG_PATHS = [
   'seokit.config.ts',

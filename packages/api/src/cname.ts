@@ -1,4 +1,4 @@
-import { makeBuildResult } from '../shared/utils';
+import { makeBuildResult } from './shared/utils'
 import type { BuildResult, CNAMEConfig, CNAMEOptions } from './types'
 
 const normalizePath = (path: string): string =>

@@ -1,0 +1,54 @@
+{
+  "name": "@seokit/api",
+  "version": "0.0.1",
+  "description": "API: SEO files generating lib: CNAME, robots.txt",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://github.com/teplostanski/seokit/main/packages/api#readme",
+  "bugs": {
+    "url": "https://github.com/teplostanski/seokit/main/packages/api/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teplostanski/seokit/main/packages/api.git"
+  },
+  "author": "Igor Teplostanski <igor@teplostan.ski>",
+  "funding": "https://donate.teplostan.ski",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "lint": "eslint packages",
+    "lint:fix": "npm run lint --fix",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier packages/**/*.{js,ts,md} --write --no-error-on-unmatched-pattern",
+    "release": "bumpp && npm publish",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "tsdown": "^0.11.9",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  }
+}

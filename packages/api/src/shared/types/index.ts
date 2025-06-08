@@ -1,4 +1,4 @@
-import type { CNAMEConfig } from "../../api/types"
+import type { CNAMEConfig } from '../../types'
 
 export interface RobotsOptions {
   comment?: string | string[]

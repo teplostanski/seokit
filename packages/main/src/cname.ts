@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { loadConfig } from './config'
-import { buildCNAME } from './api'
+import { buildCNAME } from '../../api/src'
 
 export async function createCNAME(): Promise<void> {
   const config = await loadConfig()

@@ -1,76 +1,20 @@
 {
-  "name": "seokit",
+  "private": true, 
   "version": "0.0.1",
-  "description": "SEO files generating lib: CNAME, robots.txt",
-  "type": "module",
-  "license": "MIT",
-  "homepage": "https://github.com/teplostanski/seokit#readme",
-  "bugs": {
-    "url": "https://github.com/teplostanski/seokit/issues"
+  "workspaces": ["packages/*"], 
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/teplostanski/seokit.git"
   },
-  "author": "Igor Teplostanski <igor@teplostan.ski>",
-  "funding": "https://donate.teplostan.ski",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": {
-        "import": "./dist/index.d.ts",
-        "require": "./dist/index.d.cts"
-      },
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./config": {
-      "types": {
-        "import": "./dist/config.d.ts",
-        "require": "./dist/config.d.cts"
-      },
-      "import": "./dist/config.js",
-      "require": "./dist/config.cjs"
-    },
-    "./api": {
-      "types": {
-        "import": "./dist/api.d.ts",
-        "require": "./dist/api.d.cts"
-      },
-      "import": "./dist/api.js",
-      "require": "./dist/api.cjs"
-    },
-    "./package.json": "./package.json"
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teplostanski/seokit/issues"
   },
-  "publishConfig": {
-    "access": "public"
-  },
-  "scripts": {
-    "lint": "eslint src",
-    "lint:fix": "npm run lint --fix",
-    "build": "tsdown",
-    "dev": "tsdown --watch",
-    "test": "vitest",
-    "typecheck": "tsc --noEmit",
-    "format": "prettier src/**/*.{js,ts,md} --write --no-error-on-unmatched-pattern",
-    "release": "bumpp && npm publish",
-    "prepublishOnly": "npm run build"
-  },
-  "devDependencies": {
-    "@types/node": "^22.15.29",
-    "@typescript-eslint/eslint-plugin": "^8.33.1",
-    "@typescript-eslint/parser": "^8.33.1",
-    "eslint": "^9.28.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.4.1",
-    "prettier": "^3.5.3",
-    "tsdown": "^0.11.9",
-    "typescript": "^5.8.3",
-    "vitest": "^3.1.3"
-  }
+  "homepage": "https://github.com/teplostanski/seokit#readme",
+  "description": ""
 }

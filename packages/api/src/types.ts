@@ -1,4 +1,4 @@
-import type { MakeBuildResult } from '../shared/types'
+import type { MakeBuildResult } from './shared/types'
 
 export type CNAMEOptions = {
   customHostname?: string

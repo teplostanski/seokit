@@ -1,5 +1,5 @@
-import type { RobotsOptions } from '../shared/types'
-import { makeBuildResult } from '../shared/utils'
+import type { RobotsOptions } from './shared/types'
+import { makeBuildResult } from './shared/utils'
 import type { BuildResult } from './types'
 
 const NEW_LINE = '\n' as const
@@ -34,7 +34,7 @@ const policyMap = {
   host: (rule: string) => addLine('Host', rule),
 } as const
 
-export const buildUserAgentPolicies = (
+const buildUserAgentPolicies = (
   policyArray: Array<{
     userAgent: string
     disallow?: string | string[]
@@ -56,7 +56,7 @@ export const buildUserAgentPolicies = (
     }, '')
 }
 
-export const composeContent = (config: Omit<RobotsOptions, 'path'>): string => {
+const composeContent = (config: Omit<RobotsOptions, 'path'>): string => {
   const sections = [
     config.comment ? policyMap.comment(config.comment) : '',
     config.policy ? buildUserAgentPolicies(config.policy) : '',

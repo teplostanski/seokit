@@ -1,7 +1,7 @@
 import { writeFile, mkdir } from 'fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { loadConfig } from './config'
-import { buildRobots } from './api'
+import { buildRobots } from '../../api/src'
 
 export const createRobots = async (): Promise<void> => {
   const config = await loadConfig()
